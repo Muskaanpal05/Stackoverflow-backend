@@ -38,7 +38,7 @@ public class UserController {
      * @throws SignUpRestrictedException
      */
     @PostMapping("/signup")
-    public ResponseEntity<SignupUserResponse> signup(@RequestBody SignupUserRequest signupUserRequest) throws SignUpRestrictedException {
+    public ResponseEntity<SignupUserResponse> signup(SignupUserRequest signupUserRequest) throws SignUpRestrictedException {
         LOGGER.info("In signup method.");
         final UserEntity userEntity = new UserEntity();
         userEntity.setUuid(UUID.randomUUID().toString());
@@ -52,10 +52,10 @@ public class UserController {
         userEntity.setContactNumber(signupUserRequest.getContactNumber());
         userEntity.setAboutMe(signupUserRequest.getAboutMe());
         userEntity.setDob(signupUserRequest.getDob());
-        userEntity.setRole("user");
+        userEntity.setRole("nonadmin");
         LOGGER.info("The User Info is {}",userEntity);
         final UserEntity createdUserEntity = userBusinessService.signup(userEntity);
-        SignupUserResponse userResponse = new SignupUserResponse().id(createdUserEntity.getUuid()).status("REGISTERED");
+        SignupUserResponse userResponse = new SignupUserResponse().id(createdUserEntity.getUuid()).status("USER SUCCESSFULLY REGISTERED");
         LOGGER.info("Signup Successful");
         return new ResponseEntity<SignupUserResponse>(userResponse,HttpStatus.CREATED);
     }
@@ -78,7 +78,7 @@ public class UserController {
         UserAuthEntity userAuthToken = userBusinessService.authenticate(decodedArray[0],decodedArray[1]);
         UserEntity user = userAuthToken.getUser();
         LOGGER.info("Signin Successful");
-        SigninResponse signinResponse = new SigninResponse().id(user.getUuid()).message("Successfully Signedin");
+        SigninResponse signinResponse = new SigninResponse().id(user.getUuid()).message("SIGNED IN SUCCESSFULLY");
         HttpHeaders header= new HttpHeaders();
         header.add("access-token", userAuthToken.getAccessToken());
         return new ResponseEntity<SigninResponse>(signinResponse, header,HttpStatus.OK);
@@ -99,7 +99,7 @@ public class UserController {
 
         UserEntity user = userAuthEntity.getUser();
         LOGGER.info("Signout Successful");
-        SignoutResponse signoutResponse = new SignoutResponse().id(user.getUuid()).message("Successfully Signed out");
+        SignoutResponse signoutResponse = new SignoutResponse().id(user.getUuid()).message("SIGNED OUT SUCCESSFULLY");
         return new ResponseEntity<SignoutResponse>(signoutResponse,HttpStatus.OK);
 
     }

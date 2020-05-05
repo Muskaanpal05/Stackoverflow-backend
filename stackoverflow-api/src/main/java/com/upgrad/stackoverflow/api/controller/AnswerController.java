@@ -40,7 +40,7 @@ public class AnswerController {
      * @throws InvalidQuestionException
      */
     @PostMapping("/question/{questionId}/answer/create")
-    public ResponseEntity<AnswerResponse> postAnswer(@RequestBody AnswerRequest answerRequest, @RequestHeader String authorization, @PathVariable String questionId) throws AuthorizationFailedException, InvalidQuestionException
+    public ResponseEntity<AnswerResponse> postAnswer(AnswerRequest answerRequest, @RequestHeader String authorization, @PathVariable String questionId) throws AuthorizationFailedException, InvalidQuestionException
     {
         AnswerEntity answerEntity=new AnswerEntity();
         answerEntity.setUuid(UUID.randomUUID().toString());
@@ -49,7 +49,7 @@ public class AnswerController {
         QuestionEntity questionEntity = answerBusinessService.getQuestionByUuid(questionId);
         answerEntity.setQuestion(questionEntity);
         AnswerEntity answerEntity1 = answerBusinessService.createAnswer(answerEntity,authorization);
-        AnswerResponse answerResponse = new AnswerResponse().id(answerEntity1.getUuid()).status("Answer Created");
+        AnswerResponse answerResponse = new AnswerResponse().id(answerEntity1.getUuid()).status("ANSWER CREATED");
         return new ResponseEntity<AnswerResponse>(answerResponse, HttpStatus.CREATED);
     }
     /**
@@ -63,12 +63,12 @@ public class AnswerController {
      * @throws AnswerNotFoundException
      */
      @PutMapping("/answer/edit/{answerId}")
-    public ResponseEntity<AnswerEditResponse> editAnswer(@RequestBody AnswerEditRequest answerEditRequest, @RequestHeader String authorization, @PathVariable String answerId) throws AuthorizationFailedException, AnswerNotFoundException
+    public ResponseEntity<AnswerEditResponse> editAnswer(AnswerEditRequest answerEditRequest, @RequestHeader String authorization, @PathVariable String answerId) throws AuthorizationFailedException, AnswerNotFoundException
      {
          AnswerEntity answerEntity=new AnswerEntity();
          answerEntity.setAns(answerEditRequest.getContent());
          AnswerEntity answerEntity1 = answerBusinessService.editAnswerContent(answerEntity,  answerId,  authorization);
-         AnswerEditResponse answerEditResponse =new AnswerEditResponse().id(answerEntity1.getUuid()).status("Answer Edited");
+         AnswerEditResponse answerEditResponse =new AnswerEditResponse().id(answerEntity1.getUuid()).status("ANSWER EDITED");
          return new ResponseEntity<AnswerEditResponse>(answerEditResponse, HttpStatus.OK);
      }
       /**
@@ -84,7 +84,7 @@ public class AnswerController {
     public ResponseEntity<AnswerDeleteResponse> deleteAnswer(@PathVariable String answerId, @RequestHeader("authorization") String authorization) throws AuthorizationFailedException, AnswerNotFoundException
      {
          AnswerEntity answerEntity = answerBusinessService.deleteAnswer(answerId, authorization);
-         AnswerDeleteResponse answerDeleteResponse = new AnswerDeleteResponse().id(answerEntity.getUuid()).status("Answer Deleted");
+         AnswerDeleteResponse answerDeleteResponse = new AnswerDeleteResponse().id(answerEntity.getUuid()).status("ANSWER DELETED");
          return new ResponseEntity<AnswerDeleteResponse>(answerDeleteResponse,HttpStatus.OK);
      }
 
@@ -98,7 +98,7 @@ public class AnswerController {
      * @throws InvalidQuestionException
      */
       @GetMapping("/answer/all/{questionId}")
-    public ResponseEntity<List<AnswerDetailsResponse>> getAllByquestionId(@PathVariable String questionId, @RequestHeader("auhtorization") String authorization) throws AuthorizationFailedException, InvalidQuestionException
+    public ResponseEntity<List<AnswerDetailsResponse>> getAllByquestionId(@PathVariable String questionId, @RequestHeader("authorization") String authorization) throws AuthorizationFailedException, InvalidQuestionException
       {
           TypedQuery<AnswerEntity> answerList = answerBusinessService.getAnswersByQuestion(questionId, authorization);
           List<AnswerEntity> resultList = answerList.getResultList();
