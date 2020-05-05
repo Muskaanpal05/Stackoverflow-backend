@@ -38,10 +38,10 @@ public class UserBusinessService {
         userEntity.setPassword(encryptedText[1]);
         LOGGER.info("Password Encryption Successful, checking if user already exists.");
         if(userDao.getUserByUsername(userEntity.getUserName())!=null){
-            throw new SignUpRestrictedException("SGR-001", "Username Already Exist");
+            throw new SignUpRestrictedException("SGR-001", "Try any other Username, this Username has already been taken");
         }
         if(userDao.getUserByEmail(userEntity.getEmail())!=null){
-            throw new SignUpRestrictedException("SGR-002", "User Email-id Already Exist");
+            throw new SignUpRestrictedException("SGR-002", "This user has already been registered, try with any other emailId");
         }
         return userDao.createUser(userEntity);
     }
@@ -54,7 +54,7 @@ public class UserBusinessService {
         LOGGER.info("In signin Service, getting user from database");
         UserEntity userEntity = userDao.getUserByUsername(username);
         if(userEntity==null){
-            throw new AuthenticationFailedException("SGR-001","User with email not found");
+            throw new AuthenticationFailedException("ATH-001","This username does not exist");
         }
         LOGGER.info("Checking Password");
         final String encryptedPassword = passwordCryptographyProvider.encrypt(password, userEntity.getSalt());
@@ -75,7 +75,7 @@ public class UserBusinessService {
             return userAuthToken;
         }
         else{
-            throw new AuthenticationFailedException("SGR-001", "Password Failed");
+            throw new AuthenticationFailedException("ATH-002", "Password failed");
         }
     }
 
@@ -86,12 +86,12 @@ public class UserBusinessService {
     public UserAuthEntity signout(String authorization) throws SignOutRestrictedException {
         LOGGER.info("In signout Service");
         if(authorization==null)
-            throw new SignOutRestrictedException("SGR-001", "Access Token is null");
+            throw new SignOutRestrictedException("SGR-001", "User is not Signed in");
         UserAuthEntity userAuthEntity = userDao.getUserAuthByAccesstoken(authorization);
         if(userAuthEntity==null)
-            throw new SignOutRestrictedException("SGR-001", "Invalid Access Token");
+            throw new SignOutRestrictedException("SGR-001", "User is not Signed in");
         if(userAuthEntity.getLogoutAt()!=null)
-            throw new SignOutRestrictedException("SGR-001","Already Logged Out");
+            throw new SignOutRestrictedException("SGR-001","User is not Signed in");
 
         final ZonedDateTime now = ZonedDateTime.now();
         LOGGER.info("Setting Logout time");

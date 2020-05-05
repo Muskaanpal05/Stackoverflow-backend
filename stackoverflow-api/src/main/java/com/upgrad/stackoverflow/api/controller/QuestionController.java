@@ -41,7 +41,7 @@ public class QuestionController {
         QuestionEntity question = questionBusinessService.createQuestion(questionEntity, authorization);
         QuestionResponse questionResponse = new QuestionResponse();
         questionResponse.setId(question.getUuid());
-        questionResponse.setStatus("Question created");
+        questionResponse.setStatus("QUESTION CREATED");
         return new ResponseEntity<>(questionResponse, HttpStatus.OK);
     }
     /**
@@ -102,7 +102,7 @@ public class QuestionController {
     @DeleteMapping("/delete/{questionId}")
     public ResponseEntity<QuestionDeleteResponse> deleteQuestion(@PathVariable String questionId, @RequestHeader("authorization") String authorization) throws AuthorizationFailedException,InvalidQuestionException{
         QuestionEntity questionEntity = questionBusinessService.deleteQuestion(questionId,authorization);
-        QuestionDeleteResponse questionDeleteResponse = new QuestionDeleteResponse().id(questionEntity.getUuid()).status("Question Deleted");
+        QuestionDeleteResponse questionDeleteResponse = new QuestionDeleteResponse().id(questionEntity.getUuid()).status("QUESTION DELETED");
         return new ResponseEntity<>(questionDeleteResponse,HttpStatus.OK);
     }
 
@@ -117,7 +117,7 @@ public class QuestionController {
      */
     @GetMapping("/all/{userId}")
     public ResponseEntity<List<QuestionDetailsResponse>> getAllByUserId(@PathVariable String userId, @RequestHeader("authorization") String authorization) throws AuthorizationFailedException, UserNotFoundException{
-        TypedQuery<QuestionEntity> questionList = questionBusinessService.getQuestionsByUser(userId,authorization);
+        TypedQuery<QuestionEntity> questionList = questionBusinessService.getQuestcionsByUser(userId,authorization);
         List<QuestionEntity> resultList = questionList.getResultList();
         List<QuestionDetailsResponse> responseList = resultList.stream()
                 .map(question -> {
