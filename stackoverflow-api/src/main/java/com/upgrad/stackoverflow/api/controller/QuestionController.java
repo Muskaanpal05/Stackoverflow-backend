@@ -117,7 +117,7 @@ public class QuestionController {
      */
     @GetMapping("/all/{userId}")
     public ResponseEntity<List<QuestionDetailsResponse>> getAllByUserId(@PathVariable String userId, @RequestHeader("authorization") String authorization) throws AuthorizationFailedException, UserNotFoundException{
-        TypedQuery<QuestionEntity> questionList = questionBusinessService.getQuestcionsByUser(userId,authorization);
+        TypedQuery<QuestionEntity> questionList = questionBusinessService.getQuestionsByUser(userId,authorization);
         List<QuestionEntity> resultList = questionList.getResultList();
         List<QuestionDetailsResponse> responseList = resultList.stream()
                 .map(question -> {
