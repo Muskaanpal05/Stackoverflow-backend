@@ -40,7 +40,7 @@ public class AnswerController {
      * @throws InvalidQuestionException
      */
     @PostMapping("/question/{questionId}/answer/create")
-    public ResponseEntity<AnswerResponse> postAnswer(@RequestBody AnswerRequest answerRequest, @RequestHeader String authorization, @PathVariable String questionId) throws AuthorizationFailedException, InvalidQuestionException
+    public ResponseEntity<AnswerResponse> postAnswer(AnswerRequest answerRequest, @RequestHeader String authorization, @PathVariable String questionId) throws AuthorizationFailedException, InvalidQuestionException
     {
         AnswerEntity answerEntity=new AnswerEntity();
         answerEntity.setUuid(UUID.randomUUID().toString());
@@ -63,7 +63,7 @@ public class AnswerController {
      * @throws AnswerNotFoundException
      */
      @PutMapping("/answer/edit/{answerId}")
-    public ResponseEntity<AnswerEditResponse> editAnswer(@RequestBody AnswerEditRequest answerEditRequest, @RequestHeader String authorization, @PathVariable String answerId) throws AuthorizationFailedException, AnswerNotFoundException
+    public ResponseEntity<AnswerEditResponse> editAnswer(AnswerEditRequest answerEditRequest, @RequestHeader String authorization, @PathVariable String answerId) throws AuthorizationFailedException, AnswerNotFoundException
      {
          AnswerEntity answerEntity=new AnswerEntity();
          answerEntity.setAns(answerEditRequest.getContent());
@@ -98,7 +98,7 @@ public class AnswerController {
      * @throws InvalidQuestionException
      */
       @GetMapping("/answer/all/{questionId}")
-    public ResponseEntity<List<AnswerDetailsResponse>> getAllByquestionId(@PathVariable String questionId, @RequestHeader("auhtorization") String authorization) throws AuthorizationFailedException, InvalidQuestionException
+    public ResponseEntity<List<AnswerDetailsResponse>> getAllByquestionId(@PathVariable String questionId, @RequestHeader("authorization") String authorization) throws AuthorizationFailedException, InvalidQuestionException
       {
           TypedQuery<AnswerEntity> answerList = answerBusinessService.getAnswersByQuestion(questionId, authorization);
           List<AnswerEntity> resultList = answerList.getResultList();

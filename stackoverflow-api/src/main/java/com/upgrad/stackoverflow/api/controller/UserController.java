@@ -38,7 +38,7 @@ public class UserController {
      * @throws SignUpRestrictedException
      */
     @PostMapping("/signup")
-    public ResponseEntity<SignupUserResponse> signup(@RequestBody SignupUserRequest signupUserRequest) throws SignUpRestrictedException {
+    public ResponseEntity<SignupUserResponse> signup(SignupUserRequest signupUserRequest) throws SignUpRestrictedException {
         LOGGER.info("In signup method.");
         final UserEntity userEntity = new UserEntity();
         userEntity.setUuid(UUID.randomUUID().toString());
